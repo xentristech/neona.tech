@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #07080c;
+  --bg-soft: #0c0e15;
+  --ink: #f4f6fb;
+  --muted: #8b93a7;
+  --line: rgba(255, 255, 255, 0.08);
+  --accent: #22d3ee; /* acento único: cian eléctrico */
+  --accent-soft: rgba(34, 211, 238, 0.14);
+  --violet: #7c3aed; /* solo en el degradado de marca/aurora */
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ---------- Aurora de fondo (energía de marca "neon") ---------- */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  animation: drift 24s ease-in-out infinite;
+}
+.aurora .a1 {
+  width: 52vw;
+  height: 52vw;
+  left: -14vw;
+  top: -18vw;
+  background: radial-gradient(circle, var(--violet), transparent 62%);
+}
+.aurora .a2 {
+  width: 46vw;
+  height: 46vw;
+  right: -16vw;
+  top: 4vw;
+  background: radial-gradient(circle, var(--accent), transparent 60%);
+  animation-delay: -8s;
+}
+.aurora .a3 {
+  width: 42vw;
+  height: 42vw;
+  left: 20vw;
+  bottom: -24vw;
+  background: radial-gradient(circle, #3b1e80, transparent 60%);
+  animation-delay: -15s;
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4vw, 3vw, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-3vw, -2vw, 0) scale(0.94);
+  }
+}
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(120% 120% at 50% 0%, transparent 34%, var(--bg) 84%);
+}
+
+/* ---------- Texto en degradado de marca ---------- */
+.grad {
+  background: linear-gradient(120deg, #fff 8%, var(--accent) 52%, var(--violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Marquee de logos ---------- */
+.marquee {
+  display: flex;
+  width: max-content;
+  gap: 0;
+  animation: scroll-x var(--dur, 40s) linear infinite;
+}
+.marquee.reverse {
+  animation-direction: reverse;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+@keyframes scroll-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora span,
+  .marquee {
+    animation: none;
+  }
+  .marquee {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
