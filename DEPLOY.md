@@ -1,51 +1,44 @@
-# Deploy de neona.tech (Git nativo de Hostinger)
+# Deploy de neona.tech (Vercel)
 
-Estrategia: **dos ramas**.
+El sitio es una **app Next.js completa** (Node): la coming-soon en `/`, el rediseño en `/beta`
+y una API route server-side `/api/improve` que llama a **OpenAI** con la key oculta en el servidor.
 
-- `main` → código fuente Next.js (se edita aquí).
-- `deploy` → sitio ya compilado (contenido de `out/` en la raíz). **Esta es la rama que Hostinger clona.**
-
-Hostinger no ejecuta `next build`, por eso servimos la rama con el HTML ya generado.
+Se despliega en **Vercel** (la plataforma de los creadores de Next.js).
 
 ---
 
-## 1. Crear el repositorio (una sola vez)
+## 1. Importar el repo en Vercel (una sola vez)
 
-En tu terminal, con el prefijo `!`:
+1. Entra a **https://vercel.com/new** e inicia sesión con GitHub (cuenta `xentristech`).
+2. Selecciona el repo **`neona.tech`** → **Import**.
+3. En **Environment Variables**, agrega:
+   - `OPENAI_API_KEY` = tu key de OpenAI (https://platform.openai.com/api-keys)
+   - (opcional) `OPENAI_MODEL` = `gpt-4o-mini`
+4. **Deploy**. En ~1 min tienes una URL `*.vercel.app`.
 
-```bash
-! gh repo create xentristech/neona.tech --private --source=. --remote=origin
-! git push -u origin main
-! git push -u origin deploy
-```
+## 2. Auto-deploy
 
-> Si prefieres que Hostinger clone sin autenticación, crea el repo `--public` en vez de `--private`.
-> Con repo privado, en hPanel deberás añadir la **deploy key SSH** que Hostinger te da, a GitHub (Settings → Deploy keys).
+Cada `git push` a `main` dispara un deploy automático en Vercel. No hay que hacer nada más.
 
-## 2. Conectar en Hostinger (una sola vez)
+## 3. Dominio propio (neona.tech)
 
-hPanel → dominio **neona.tech** → **Avanzado → GIT**:
+En Vercel → proyecto → **Settings → Domains** → agrega `neona.tech`.
+Vercel te da los registros DNS. En Hostinger (donde vive el DNS) cambia SOLO los registros web:
 
-- **Repositorio**: `git@github.com:xentristech/neona.tech.git` (SSH) o la URL HTTPS si es público.
-- **Rama**: `deploy`
-- **Directorio**: `public_html` (raíz del dominio)
-- Guardar → **Deploy**. Hostinger clona la rama `deploy` en `public_html` y el sitio queda en vivo.
-- Activa el **webhook de auto-deploy** para que cada push a `deploy` se publique solo.
+- `@` (A) → la IP que indique Vercel (`76.76.21.21`)
+- `www` (CNAME) → `cname.vercel-dns.com`
 
-## 3. Actualizar el sitio (cada cambio)
-
-```bash
-# 1) editar el código en main, luego:
-npm run build              # genera out/
-npm run publish            # actualiza la rama deploy y hace push
-```
-
-`npm run publish` recompila, vuelca `out/` en la rama `deploy` y hace push.
-Si el webhook está activo, Hostinger publica automáticamente. Si no, pulsa **Deploy** en hPanel.
+**No toques los registros de correo** (MX, SPF, DKIM): el email `@neona.tech` sigue en Hostinger, intacto.
 
 ---
 
-### Notas
-- El dominio ya existe en Hostinger como addon: `public_html` en `/home/u848706566/domains/neona.tech/public_html`.
-- `_next/` (con guion bajo) se sirve sin problema en Apache.
-- Recuerda configurar el registro de correo `hola@neona.tech` si quieres recibir en esa dirección.
+## Local
+
+```bash
+cp .env.local.example .env.local   # y pon tu OPENAI_API_KEY
+npm run dev                        # http://localhost:3000  (/ y /beta)
+```
+
+## Notas
+- El mejorador de `/beta` usa `/api/improve` (server-side). La key nunca llega al navegador.
+- La coming-soon estática que estuvo en el hosting compartido de Hostinger queda superseded por Vercel una vez se apunte el dominio.

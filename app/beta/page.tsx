@@ -59,9 +59,6 @@ const CAT_DEFS: [string, string][] = [
   ["codigo", "Código"], ["video", "Video"], ["audio", "Audio"], ["productividad", "Productividad"],
 ];
 
-const SYSTEM_PROMPT =
-  "Eres un experto en prompt engineering. El usuario envía un prompt en español. Mejóralo haciéndolo más claro, específico y efectivo, y da exactamente 3 variantes distintas. Responde EXACTAMENTE en este formato de texto plano, sin markdown, sin comillas envolventes:\n===MEJORADO===\n(el prompt mejorado)\n===VARIANTE1===\n(variante 1)\n===VARIANTE2===\n(variante 2)\n===VARIANTE3===\n(variante 3)";
-
 /* ---------------- Helpers de estilo ---------------- */
 function badgeStyle(b: Badge): CSSProperties {
   const base: CSSProperties = { fontSize: ".6rem", fontWeight: 700, padding: "2px 8px", borderRadius: 5, letterSpacing: ".04em", textTransform: "uppercase" };
@@ -107,39 +104,17 @@ export default function Beta() {
       setPtResult(""); setPtVariants([]);
       return;
     }
-    const key = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY;
-    if (!key) {
-      setPtError("Falta la API key. Agrega NEXT_PUBLIC_ANTHROPIC_API_KEY en .env.local y reinicia el servidor (npm run dev).");
-      return;
-    }
     setPtLoading(true); setPtError(""); setPtResult(""); setPtVariants([]);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/improve", {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-api-key": key,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true",
-        },
-        body: JSON.stringify({
-          model: process.env.NEXT_PUBLIC_ANTHROPIC_MODEL || "claude-haiku-4-5-20251001",
-          max_tokens: 1200,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: "Mejora este prompt: " + input }],
-        }),
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ input }),
       });
-      if (!res.ok) {
-        const body = await res.text();
-        throw new Error(`La API respondió ${res.status}. ${body.slice(0, 160)}`);
-      }
       const data = await res.json();
-      const txt = String(data?.content?.[0]?.text || "").replace(/```[a-z]*|```/g, "").trim();
-      const parts = txt.split(/===\s*MEJORADO\s*===|===\s*VARIANTE\s*1\s*===|===\s*VARIANTE\s*2\s*===|===\s*VARIANTE\s*3\s*===/i);
-      const mejorado = (parts[1] || "").trim();
-      const variantes = [parts[2], parts[3], parts[4]].filter((x) => x && x.trim()).map((x) => x.trim());
-      setPtResult(mejorado || txt);
-      setPtVariants(variantes);
+      if (!res.ok) throw new Error(data?.error || `Error ${res.status}`);
+      setPtResult(data.improved || "");
+      setPtVariants(Array.isArray(data.variants) ? data.variants : []);
     } catch (err) {
       setPtError(err instanceof Error ? err.message : "No se pudo mejorar el prompt. Intenta de nuevo.");
     } finally {
