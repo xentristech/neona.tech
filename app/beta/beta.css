@@ -1,0 +1,53 @@
+/* Estilos del rediseño /beta — fieles a Neona Tech Rediseño.dc.html */
+
+.nt-root {
+  --nt-bg: #06060e;
+  --nt-ink: #eeeef5;
+  --nt-violet: #a78bfa;
+  --nt-pink: #f0abfc;
+  --nt-cyan: #67e8f9;
+  background: var(--nt-bg);
+  color: var(--nt-ink);
+  font-family: var(--font-dm-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+.nt-jakarta { font-family: var(--font-jakarta), sans-serif; }
+.nt-mono { font-family: var(--font-dm-mono), monospace; }
+
+@keyframes nt-blink { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
+@keyframes nt-spin { to { transform: rotate(360deg) } }
+@keyframes nt-float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+
+.nt-root ::-webkit-scrollbar { width: 9px; height: 9px }
+.nt-root ::-webkit-scrollbar-thumb { background: #26264a; border-radius: 6px }
+.nt-root ::-webkit-scrollbar-track { background: #0b0b16 }
+
+/* Hover states (equivalentes a los style-hover del prototipo) */
+.nt-navlink { transition: color .18s, background .18s }
+.nt-navlink:hover { color: #eeeef5 !important; background: rgba(167, 139, 250, .12) }
+
+.nt-btn-primary { transition: background .18s, transform .18s }
+.nt-btn-primary:hover { background: #8b6ef0 !important; transform: translateY(-1px) }
+
+.nt-btn-ghost { transition: border-color .18s, background .18s }
+.nt-btn-ghost:hover { border-color: #3a3a68 !important; background: #181834 !important }
+
+.nt-card { transition: transform .2s, border-color .2s }
+.nt-card:hover { border-color: #2a2a50 !important; transform: translateY(-3px) }
+
+.nt-row:hover { border-color: #2a2a50 !important }
+
+.nt-chip { transition: all .18s }
+.nt-copy { transition: background .18s }
+.nt-copy:hover { background: rgba(167, 139, 250, .2) !important }
+
+.nt-variant { transition: border-color .18s, background .18s }
+.nt-variant:hover { border-color: #2a2a50 !important; background: #12122a !important }
+
+.nt-footlink { transition: color .18s }
+.nt-footlink:hover { color: #9090b8 !important }
+
+.nt-input:focus { border-color: #3a3a68 }
