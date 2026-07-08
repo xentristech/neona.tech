@@ -1,0 +1,45 @@
+/* Estilos del prototipo /estyp — fieles a Estyp.dc.html */
+
+.e-root {
+  background: #06060e;
+  color: #eeeef5;
+  font-family: var(--font-dm-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+.e-jakarta { font-family: var(--font-jakarta), sans-serif; }
+.e-mono { font-family: var(--font-dm-mono), monospace; }
+
+@keyframes estyp-blink { 0%, 100% { opacity: 1 } 50% { opacity: .2 } }
+@keyframes estyp-pulse { 0%, 100% { opacity: 1; transform: scale(1) } 50% { opacity: .45; transform: scale(.82) } }
+@keyframes estyp-float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+
+.e-root ::-webkit-scrollbar { width: 9px; height: 9px }
+.e-root ::-webkit-scrollbar-thumb { background: #26264a; border-radius: 6px }
+.e-root ::-webkit-scrollbar-track { background: #0b0b16 }
+
+/* Hovers (equivalentes a los style-hover del prototipo) */
+.e-navlink { transition: color .18s, background .18s }
+.e-navlink:hover { color: #eeeef5 !important; background: rgba(167, 139, 250, .12) }
+
+.e-link:hover { color: #eeeef5 !important }
+
+.e-btn-primary { transition: background .18s, transform .18s }
+.e-btn-primary:hover { background: #8b6ef0 !important; transform: translateY(-1px) }
+
+.e-btn-ghost { transition: border-color .18s, background .18s }
+.e-btn-ghost:hover { border-color: #3a3a68 !important; background: #181834 !important }
+
+.e-btn-grad { transition: opacity .18s }
+.e-btn-grad:hover { opacity: .9 }
+
+.e-card { transition: transform .2s, border-color .2s }
+.e-card:hover { border-color: #2a2a50 !important; transform: translateY(-3px) }
+
+.e-card-soft { transition: border-color .2s }
+.e-card-soft:hover { border-color: #2a2a50 !important }
+
+.e-footlink { transition: color .18s }
+.e-footlink:hover { color: #9090b8 !important }

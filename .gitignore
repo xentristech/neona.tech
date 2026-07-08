@@ -42,3 +42,5 @@ next-env.d.ts
 
 # Handoff bundles de diseño
 *handoff*.zip
+
+.vercel
